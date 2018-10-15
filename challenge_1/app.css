@@ -11,3 +11,11 @@
     text-align: center;
     vertical-align: middle;
 }
+
+#resetBtn {
+    margin-top: 8px;   
+}
+
+body {
+    margin-left: 16px;   
+}
