@@ -3,6 +3,7 @@ var NO_WINNER = 0;
 var PLAYER1 = 1;
 var PLAYER2 = 2;
 var WIN_VECTOR = 7; // Match any bit vector with all ones
+var WIN_COLS = 3;
 var PIECES_START = 9;
 
 var winState;
@@ -17,44 +18,54 @@ var p2Rows;
 var currVectors;
 
 // Helper functions for controlling the game model
-var checkCurrRow = function(isPlayer1, row) {
+var checkCurrRow = function(row) {
   return currVectors[row] === WIN_VECTOR;
 };
 
-// Grab each bit vector from the array, use bitwise AND and OR to form the correct bit vector.
-var checkCurrCol = function(isPlayer1, col) {
-  var row1 = (currVectors[0] & 1 << col) | (1 << 0);
-  var row2 = (currVectors[1] & 1 << col) | (1 << 1);
-  var row3 = (currVectors[1] & 1 << col) | (1 << 2);
-  return row1 | row2 | row3 === WIN_VECTOR;
+// Grab each bit vector from the array.
+// If the bit mask checks out, divide by col to get 1 or 0.
+var checkCurrCol = function(col) {
+  var mask = 1 << col;
+  var row1 = (currVectors[0] & mask) >> col;
+  var row2 = (currVectors[1] & mask) >> col;
+  var row3 = (currVectors[2] & mask) >> col;
+  return row1 + row2 + row3 === 3;
 };
 
-var checkCurrMajorDiagonal = function(isPlayer1) {
-  return false;
+// Check the matrix at (0,0), (1,1), (2,2)
+var checkCurrMajorDiagonal = function() {
+  var loc1 = (currVectors[0] & 1);
+  var loc2 = (currVectors[1] & 2);
+  var loc3 = (currVectors[2] & 4);
+  return (loc1 | loc2 | loc3) === WIN_VECTOR;
 };
 
-var checkCurrMinorDiagonal = function(isPlayer1) {
-  return false;
+// Check the matrix at (0,2), (1,1), (2,0)
+var checkCurrMinorDiagonal = function() {
+  var loc1 = (currVectors[0] & 4);
+  var loc2 = (currVectors[1] & 2);
+  var loc3 = (currVectors[2] & 1);
+  return (loc1 | loc2 | loc3) === WIN_VECTOR;
 };
 
-var placePiece = function(isPlayer1, row, col) {
-  
+var placePiece = function(row, col) {
+  currVectors[row] |= 1 << col;
 };
 
-var hasPlayerWon = function(isPlayer1, row, col) {
-  currVectors = isPlayer1 ? p1Rows : p2Rows;
-  return checkCurrRow(isPlayer1, row) || checkCurrCol(isPlayer1, col) 
-    || checkCurrMajorDiagonal(isPlayer1) || checkCurrMinorDiagonal(isPlayer1);
+var hasCurrPlayerWon = function(row, col) {
+  return checkCurrRow(row) || checkCurrCol(col)
+    || checkCurrMajorDiagonal() || checkCurrMinorDiagonal();
 };
 
 var getGameText = function() {
+  if (winState !== NO_WINNER) {
+    return winState === PLAYER1 ? 'Player 1 wins!' : 'Player 2 wins!';
+  }
+
   if (!piecesLeft) {
     return 'Game is a tie!';
   }
 
-  if (winState !== NO_WINNER) {
-    return winState === PLAYER1 ? 'Player 1 wins!' : 'Player 2 wins!';
-  }
   return isPlayer1 ? 'Player 1\'s turn' : 'Player 2\'s turn';
 };
 
@@ -88,25 +99,26 @@ var onGridClick = function(event) {
 
   piecesLeft--;
 
+  currVectors = isPlayer1 ? p1Rows : p2Rows;
+
   // Place X or O in view and model, based on embedded data
-  var r = event.target.dataset.row;
-  var c = event.target.dataset.col;
+  var r = Number.parseInt(event.target.dataset.row);
+  var c = Number.parseInt(event.target.dataset.col);
+  placePiece(r, c);
   event.target.textContent = isPlayer1 ? 'X' : 'O';
-  placePiece(isPlayer1, r, c);
 
   // Check game status
-  if (hasPlayerWon(isPlayer1, r, c)) {
-    winState = isPlayer1 === ? PLAYER1 : PLAYER2 ;
+  if (hasCurrPlayerWon(r, c)) {
+    winState = isPlayer1 ? PLAYER1 : PLAYER2;
   } else {
     isPlayer1 = !isPlayer1;
   }
-  
+
   updateGameText();
 };
 
-// Initialization function, attach listeners
+// Initialization function, find relevant elements, attach listeners
 window.addEventListener('DOMContentLoaded', function() {
-  // Find relevant DOM elements, set listeners
   document.getElementById('resetBtn').addEventListener('click', onReset);
 
   for (var ele of document.getElementsByClassName('piece')) {
