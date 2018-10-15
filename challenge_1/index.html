@@ -1,26 +1,27 @@
 <!DOCTYPE html>
     <head>
         <meta charset='utf-8'/>
-        <link rel="stylesheet" href="app.css"/>
+        <link rel='stylesheet' href='app.css'/>
         <title>Vanilla Tic-Tac-Toe</title>
+        <script src='app.js'></script>
     </head>
     
     <body>
-        <h3>Player 1's Turn</h3>
+        <h3 id='gameState'></h3>
         <div class='boardRow'>
-            <div class='piece'></div>
-            <div class='piece'></div>
-            <div class='piece'></div>
+            <div class='piece' data-row='0' data-col='0'></div>
+            <div class='piece' data-row='0' data-col='1'></div>
+            <div class='piece' data-row='0' data-col='2'></div>
         </div>
         <div class='boardRow'>
-            <div class='piece'></div>
-            <div class='piece'></div>
-            <div class='piece'></div>
+            <div class='piece' data-row='1' data-col='0'></div>
+            <div class='piece' data-row='1' data-col='1'></div>
+            <div class='piece' data-row='1' data-col='2'></div>
         </div>
         <div class='boardRow'>
-            <div class='piece'></div>
-            <div class='piece'></div>
-            <div class='piece'></div>
+            <div class='piece' data-row='2' data-col='0'></div>
+            <div class='piece' data-row='2' data-col='1'></div>
+            <div class='piece' data-row='2' data-col='2'></div>
         </div>
         
         <br />
