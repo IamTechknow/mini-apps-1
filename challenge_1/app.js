@@ -13,21 +13,28 @@ var piecesLeft;
 var p1Rows;
 var p2Rows;
 
+// Used to set p1Rows or p2Rows once per turn and prevent duplicated code
+var currVectors;
+
 // Helper functions for controlling the game model
-var checkRow = function(isPlayer1, row) {
-  
+var checkCurrRow = function(isPlayer1, row) {
+  return currVectors[row] === WIN_VECTOR;
 };
 
-var checkCol = function(isPlayer1, col) {
-  
+// Grab each bit vector from the array, use bitwise AND and OR to form the correct bit vector.
+var checkCurrCol = function(isPlayer1, col) {
+  var row1 = (currVectors[0] & 1 << col) | (1 << 0);
+  var row2 = (currVectors[1] & 1 << col) | (1 << 1);
+  var row3 = (currVectors[1] & 1 << col) | (1 << 2);
+  return row1 | row2 | row3 === WIN_VECTOR;
 };
 
-var checkMajorDiagonal = function(isPlayer1) {
-  
+var checkCurrMajorDiagonal = function(isPlayer1) {
+  return false;
 };
 
-var checkMinorDiagonal = function(isPlayer1) {
-  
+var checkCurrMinorDiagonal = function(isPlayer1) {
+  return false;
 };
 
 var placePiece = function(isPlayer1, row, col) {
@@ -35,7 +42,9 @@ var placePiece = function(isPlayer1, row, col) {
 };
 
 var hasPlayerWon = function(isPlayer1, row, col) {
-  return false;
+  currVectors = isPlayer1 ? p1Rows : p2Rows;
+  return checkCurrRow(isPlayer1, row) || checkCurrCol(isPlayer1, col) 
+    || checkCurrMajorDiagonal(isPlayer1) || checkCurrMinorDiagonal(isPlayer1);
 };
 
 var getGameText = function() {
@@ -62,20 +71,24 @@ var onReset = function(event) {
 
   p1Rows = [0, 0, 0];
   p2Rows = [0, 0, 0];
+  currVectors = undefined;
 
   // Reset view
+  for (var ele of document.getElementsByClassName('piece')) {
+    ele.textContent = undefined;
+  }
   updateGameText();
 };
 
 var onGridClick = function(event) {
-  // Ignore grid already clicked on
-  if (event.target.textContent) {
+  // Ignore grid already clicked or game is finished
+  if (winState || event.target.textContent) {
     return;
   }
 
   piecesLeft--;
 
-  // Place X or O in view and model
+  // Place X or O in view and model, based on embedded data
   var r = event.target.dataset.row;
   var c = event.target.dataset.col;
   event.target.textContent = isPlayer1 ? 'X' : 'O';
@@ -83,7 +96,7 @@ var onGridClick = function(event) {
 
   // Check game status
   if (hasPlayerWon(isPlayer1, r, c)) {
-    
+    winState = isPlayer1 === ? PLAYER1 : PLAYER2 ;
   } else {
     isPlayer1 = !isPlayer1;
   }
@@ -100,7 +113,6 @@ window.addEventListener('DOMContentLoaded', function() {
     ele.addEventListener('click', onGridClick);
   }
 
-  // Reset the game
+  // Reset the game, in other words don't rely on initial state when refreshing!
   onReset();
 }, true);
-
