@@ -1,18 +1,21 @@
 var express = require('express');
 var CSVParser = require('./CSVParser.js')
 const path = require('path');
-const bodyParser = require('body-parser');
+
+// Forms
+var multer = require('multer');
+
 var app = express();
 var parser = new CSVParser();
 const PORT = 3000;
 
 // Middleware
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(multer().single('text'));
 app.use(express.static(path.join(__dirname, './client')));
 
 app.post('/csv', (req, res, next) => {
   // Acquire submitted JSON. Assume it is valid JSON.
-  var json = req.body.message;
+  var json = req.file.buffer.toString();
 
   // Send response back as CSV
   res.writeHead(201, {'Content-Type': 'application/force-download','Content-disposition':'attachment; filename=result.csv'});

@@ -9,8 +9,8 @@
     
     <body>
         <h3>Insert some JSON to generate a CSV report</h3>
-        <form id='csvForm' name='csvForm' method='POST' action='/csv'>
-            <textarea form='csvForm' name='message' rows='10' cols='60'></textarea>
+        <form id='csvForm' method='POST' action='/csv' enctype="multipart/form-data">
+            <input type="file" name="text">
             <br />
             <button type='submit' class='btn btn-primary'>Generate CSV</button>
         </form>
