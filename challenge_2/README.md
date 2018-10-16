@@ -2,9 +2,8 @@
 
 My implementation of the CSV Report Generator shall meet the following requirements:
 
-* [ ] Use express to serve static files and to route the POST endpoint
-* [ ] Client app to submit JSON data to the server, first from a text field
-* [ ] Uses an HTML form and action to send the POST request
+* [X] Use express to serve static files and to route the POST endpoint
+* [X] Client app to submit JSON data to the server, first from a text field
 * [ ] Only uses jQuery for DOM manipulation
 * [ ] Follows the conversion specification:
   * [ ] Flatten the JSON hierarchy
