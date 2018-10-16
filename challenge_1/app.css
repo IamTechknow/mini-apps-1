@@ -1,21 +1,31 @@
+.boardRow {
+    display: flex;
+    justify-content: center;
+}
+
 .piece {
     display: inline-block;
     width: 32px;
     height: 32px;
-    
+
     margin: 4px;
-    
+
     border-style: solid;
     border-width: 1px;
-    
+
     text-align: center;
     vertical-align: middle;
 }
 
+.btnMargin {
+    margin-top: 10px;
+}
+
 #resetBtn {
-    margin-top: 8px;   
+    display: flex;
+    margin: auto;
 }
 
 body {
-    margin-left: 16px;   
+    margin-left: 16px;
 }
