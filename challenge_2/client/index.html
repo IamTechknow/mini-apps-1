@@ -9,10 +9,10 @@
     
     <body>
         <h3>Insert some JSON to generate a CSV report</h3>
-        <form id='csvForm' action='/csv'>
-            <textarea name='message' rows='10' cols='60' form="csvForm"></textarea>
+        <form id='csvForm' name='csvForm' method='POST' action='/csv'>
+            <textarea form='csvForm' name='message' rows='10' cols='60'></textarea>
             <br />
-            <button type='submit' class='btn btn-primary'>Generate CSV</submit>
+            <button type='submit' class='btn btn-primary'>Generate CSV</button>
         </form>
     </body>
 </html>
