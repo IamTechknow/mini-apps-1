@@ -14,6 +14,10 @@ class TicTacToe {
     this.isPlayer1 = undefined;
     this.piecesLeft = undefined;
 
+    this.player1Wins = 0;
+    this.player2Wins = 0;
+    this.ties = 0;
+
     // Bit vectors for each player
     this.p1Rows = undefined;
     this.p2Rows = undefined;
@@ -56,14 +60,22 @@ class TicTacToe {
   placePiece(row, col) {
     this.piecesLeft--;
     this.currVectors = this.isPlayer1 ? this.p1Rows : this.p2Rows;
-    
+
     this.currVectors[row] |= 1 << col;
-    
+
     // Check game status
     if (game.hasCurrPlayerWon(row, col)) {
       this.winState = this.isPlayer1 ? PLAYER1 : PLAYER2;
+      if (this.winState === PLAYER1) {
+        this.player1Wins++;
+      } else {
+        this.player2Wins++;
+      }
     } else {
       this.isPlayer1 = !this.isPlayer1;
+      if (!this.piecesLeft) {
+        this.ties++;
+      }
     }
   };
 
@@ -71,14 +83,19 @@ class TicTacToe {
     return this.checkCurrRow(row) || this.checkCurrCol(col)
       || this.checkCurrMajorDiagonal() || this.checkCurrMinorDiagonal();
   };
-  
+
   reset() {
+    // Allow player 2 to go first if player 2 won the last round.
+    this.isPlayer1 = this.winState !== PLAYER2;
     this.winState = NO_WINNER;
-    this.isPlayer1 = true;
     this.piecesLeft = PIECES_START;
 
     this.p1Rows = [0, 0, 0];
     this.p2Rows = [0, 0, 0];
-    this.currVectors = undefined;   
+    this.currVectors = undefined;
+  }
+  
+  getGameStats() {
+    return ` (${this.player1Wins}-${this.player2Wins}-${this.ties})`;
   }
 }

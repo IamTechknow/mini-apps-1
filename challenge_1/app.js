@@ -14,7 +14,7 @@ var getGameText = function() {
 };
 
 var updateGameText = function () {
-  document.getElementById('gameState').textContent = getGameText();
+  document.getElementById('gameState').textContent = getGameText() + game.getGameStats();
 };
 
 // Event listener, handle both reset and grid clicks
