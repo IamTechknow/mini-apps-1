@@ -17,41 +17,39 @@ var updateGameText = function () {
   document.getElementById('gameState').textContent = getGameText();
 };
 
-// Event listener functions
-var onReset = function(event) {
-  game.reset(); // Reset Model
+// Event listener, handle both reset and grid clicks
+var onClick = function(event, doReset) {
+  if (doReset || event.target.id === 'resetBtn') {
+    game.reset(); // Reset Model
 
-  // Reset view
-  for (var ele of document.getElementsByClassName('piece')) {
-    ele.textContent = undefined;
+    // Reset view
+    for (var ele of document.getElementsByClassName('piece')) {
+      ele.textContent = undefined;
+    }
+  } else {
+    // Ignore grid already clicked or game is finished
+    if (game.winState || event.target.textContent) {
+      return;
+    }
+
+    // Place X or O in view and model, based on embedded data
+    var r = Number.parseInt(event.target.dataset.row);
+    var c = Number.parseInt(event.target.dataset.col);
+    event.target.textContent = game.isPlayer1 ? 'X' : 'O';
+    game.placePiece(r, c);
+
+    // Game has been updated, update view
   }
-  updateGameText();
-};
-
-var onGridClick = function(event) {
-  // Ignore grid already clicked or game is finished
-  if (game.winState || event.target.textContent) {
-    return;
-  }
-
-  // Place X or O in view and model, based on embedded data
-  var r = Number.parseInt(event.target.dataset.row);
-  var c = Number.parseInt(event.target.dataset.col);
-  event.target.textContent = game.isPlayer1 ? 'X' : 'O';
-  game.placePiece(r, c);
-
-  // Game has been updated and determined winner, update view
   updateGameText();
 };
 
 // Initialization function, find relevant elements, attach listeners
 window.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('resetBtn').addEventListener('click', onReset);
-
+  document.getElementById('resetBtn').addEventListener('click', onClick);
   for (var ele of document.getElementsByClassName('piece')) {
-    ele.addEventListener('click', onGridClick);
+    ele.addEventListener('click', onClick);
   }
 
   // Reset the game, in other words don't rely on initial state when refreshing!
-  onReset();
+  onClick(null, true);
 }, true);
