@@ -1,2 +1,18 @@
-
-
+<!DOCTYPE html>
+    <head>
+        <meta charset='utf-8'/>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <link rel='stylesheet' href='app.css'/>
+        <title>CSV Report Generator</title>
+        <script src='app.js'></script>
+    </head>
+    
+    <body>
+        <h3>Insert some JSON to generate a CSV report</h3>
+        <form id='csvForm' action='/csv'>
+            <textarea name='message' rows='10' cols='60' form="csvForm"></textarea>
+            <br />
+            <button type='submit' class='btn btn-primary'>Generate CSV</submit>
+        </form>
+    </body>
+</html>
