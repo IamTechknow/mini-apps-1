@@ -15,8 +15,8 @@ app.post('/csv', (req, res, next) => {
   var json = req.body.message;
 
   // Send response back as CSV
-  res.set('Content-Type', 'text/plain');
-  res.status(201).send(parser.readJSON(JSON.parse(json)));
+  res.writeHead(201, {'Content-Type': 'application/force-download','Content-disposition':'attachment; filename=result.csv'});
+  res.end(parser.readJSON(JSON.parse(json)));
 });
 
 app.listen(PORT, () => {
