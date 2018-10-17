@@ -16,6 +16,10 @@ window.addEventListener('DOMContentLoaded', function() {
       mode: 'cors',
       body: data
     }).then(response => response.json())
-    .then(response => createLink(response.result));
+    .then(response => {
+      if (response.result) {
+        createLink(response.result)
+      }
+    });
   });
 });
