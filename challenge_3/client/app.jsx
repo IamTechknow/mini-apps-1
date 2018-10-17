@@ -138,15 +138,20 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currView: MAIN
+      currView: MAIN,
+      expireMonth: '01',
+      expireYear: '09'
     };
+    
+    // Keep track of form field names
+    this.names = ['account', 'pass', 'addr1', 'addr2' , 'city', 'state', 'credit', 'csv', 'expireMonth', 'expireYear', 'zip'];
+    
+    this.formData = undefined;
   }
 
-  // Submit handler, handles the form each time continue is pressed
+  // Submit handler, doesn't currently do much ATM.
   onSubmit(event) {
     event.preventDefault();
-    // Send a fetch for the corresponding table endpoint
-
 
     // Increment the current view to render the next one
     this.onNext();
@@ -159,33 +164,72 @@ class App extends React.Component {
     // Handle specific cases, otherwise just write to state
     this.setState({ [name] : event.target.value });
   }
+  
+  resetState() {
+    var oldState = Object.assign({}, this.state);
+    
+    for (var name of this.names) {
+      oldState[name] = null;
+    }
+    
+    // Reset Select tag data manually
+    oldState.expireMonth = '01';
+    oldState.expireYear = '19';
+    
+    this.setState(oldState);
+  }
 
   // Simply increment the current state and wrap around at the ended to recall render()
   onNext() {
     var newState = this.state.currView + 1;
     if (newState > FINISH) {
       newState = MAIN;
+      this.resetState();
     }
 
-    this.setState({
-      currView: newState
-    });
+    // Go to the next page (or wrap around), or send a request to the POST endpoint (and wait for a success response)
+    if (newState !== FINISH) { 
+      this.setState({
+        currView: newState
+      });
+    } else {
+      fetch('checkout', {
+        method: 'POST',
+        mode: 'cors',
+        body: this.formData
+      }).then(response => response.json())
+      .then(response => {
+        if (response.success) {
+          this.setState({
+            currView: FINISH
+          });
+        }
+      })
+      .catch(err => {throw err});
+    }
   }
 
   // Takes the app state and returns an array of objects with key and value properties
-  // FIXME: Currently assumes all fields are filled
+  // Also create a FormData here!
   processState(state) {
     var result = [];
     var keys = ['Username', 'Password', 'Address Line 1', 'Address Line 2', 'City', 'State', 'Credit Card Number',
                 'Credit Card CSV', 'Credit Card Expiration Month', 'Credit Card Expiration Year', 'Credit Card Zip Code'];
-    var names = ['account', 'pass', 'addr1', 'addr2' , 'city', 'state', 'credit', 'csv', 'expireMonth', 'expireYear', 'zip'];
     var vals = Object.values(state);
 
+    var data = new FormData();
+
+    // Don't show content that the user hasn't filled. With that said, do fill default values for expiration month and year due to using select tag.
     for (var i = 0; i < keys.length; i++) {
-      var obj = {key: keys[i], val: state[names[i]]};
-      result.push(obj);
+      if (state[this.names[i]] !== undefined) {
+        var obj = {key: keys[i], val: state[this.names[i]]};
+        data.set(keys[i], state[this.names[i]]);
+
+        result.push(obj);
+      }
     }
 
+    this.formData = data;
     return result;
   }
 
