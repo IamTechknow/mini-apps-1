@@ -115,7 +115,7 @@ var Review = (props) => (
         <li className="list-group-item">{`${item.key}: ${item.val}`}</li>  
       )}
     </ul>
-    <button className='btn btn-primary' onClick={props.onNext}>Checkout</button>
+    <button className='btn btn-primary' type='submit'>Checkout</button>
   </div>
 );
 
@@ -223,7 +223,7 @@ class App extends React.Component {
     for (var i = 0; i < keys.length; i++) {
       if (state[this.names[i]] !== undefined) {
         var obj = {key: keys[i], val: state[this.names[i]]};
-        data.set(keys[i], state[this.names[i]]);
+        data.set(this.names[i], state[this.names[i]]);
 
         result.push(obj);
       }
@@ -241,7 +241,7 @@ class App extends React.Component {
           { this.state.currView === STEP_ONE && <Account onChange={this.onInputChange.bind(this)} /> }
           { this.state.currView === STEP_TWO && <PersonalInfo onChange={this.onInputChange.bind(this)} /> }
           { this.state.currView === STEP_THREE && <PaymentInfo onChange={this.onInputChange.bind(this)} /> }
-          { this.state.currView === REVIEW && <Review data={this.processState(this.state)} onChange={this.onInputChange.bind(this)} onNext={this.onNext.bind(this)} /> }
+          { this.state.currView === REVIEW && <Review data={this.processState(this.state)} onChange={this.onInputChange.bind(this)} /> }
           { this.state.currView === FINISH && <Finish onNext={this.onNext.bind(this)} /> }
         </form>
       </div>
