@@ -6,7 +6,7 @@
   "license": "UNLICENSED",
   "private": true,
   "scripts": {
-    "babel": "babel . --watch --out-dir public/compiled --ignore=node_modules,compiled,db --source-maps inline",
+    "babel": "babel . --watch --out-dir public/compiled --ignore=node_modules,public/compiled,db --source-maps inline",
     "start": "npm run babel & live-server"
   },
   "dependencies": {
