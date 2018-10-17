@@ -6,7 +6,7 @@
   "license": "UNLICENSED",
   "private": true,
   "scripts": {
-    "babel": "babel . --watch --out-dir compiled --presets=react --ignore=node_modules,compiled --source-maps inline",
+    "babel": "babel . --watch --out-dir public/compiled --ignore=node_modules,compiled,db --source-maps inline",
     "start": "npm run babel & live-server"
   },
   "dependencies": {
@@ -16,17 +16,8 @@
     "mysql": "^2.16.0",
     "express": "^4.16.4"
   },
-  "babel": {
-    "presets": [
-      "@babel/preset-env",
-      "@babel/preset-react"
-    ],
-    "plugins": [
-      "@babel/plugin-proposal-class-properties"
-    ]
-  },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
+    "@babel/cli": "^7.1.2",
     "@babel/core": "^7.1.2",
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
