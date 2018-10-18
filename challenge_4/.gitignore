@@ -1,1 +1,3 @@
 public/app.js
+dist/
+package-lock.json
