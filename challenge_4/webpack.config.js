@@ -9,8 +9,8 @@ module.exports = {
   mode: 'development',
   cache: true,
   output: {
-    path: DEST,
-    filename: path.resolve(__dirname, './dist'),
+    path: path.resolve(__dirname, './public'),
+    filename: 'bundle.js',
     publicPath: '/dist/'
   },
   resolve: {
