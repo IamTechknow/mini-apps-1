@@ -8,8 +8,8 @@ const NONE = 0, RED = 1, BLACK = 2;
 var BoardRow = (props) => (
   <div className='row'>
     { 
-      props.row.map((cell, idx) => (
-        <div className='disc' onClick={props.onClick.bind(this, idx)} />
+      props.row.map((disc, idx) => (
+        <div className={disc === 0 ? 'disc' : (disc === RED ? 'disc red' : 'disc black')} onClick={props.onClick.bind(this, idx)} />
       ))
     }
   </div>
@@ -21,7 +21,7 @@ export default class App extends React.Component {
     this.game = new ConnectFour();
 
     this.state = {
-      game: this.game.gameBoard 
+      game: this.game.board 
     };
   }
 
@@ -39,7 +39,11 @@ export default class App extends React.Component {
 
   // Upon click, attempt to add a disc to the column and update the React state
   onClick(col) {
+    this.game.addToCol(col);
     
+    this.setState({
+      game: this.game.board
+    });
   }
 
   // Render the game board by emitting divs (Piece objects) with certain properties
@@ -49,7 +53,7 @@ export default class App extends React.Component {
         <h1>{this.getGameStatus()}</h1>
         { 
           this.state.game.map((row, idx) => (
-            <BoardRow row={row} onClick={this.onClick} />
+            <BoardRow row={row} onClick={this.onClick.bind(this)} />
           ))
         }
       </div>
