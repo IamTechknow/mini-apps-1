@@ -53,6 +53,7 @@ export default class App extends React.Component {
     return (
       <div>
         <h1>{this.getGameStatus()}</h1>
+        <p>Click on the grid to insert a disc</p>
         { 
           this.state.game.map((row, idx) => (
             <BoardRow row={row} onClick={this.onClick.bind(this)} />
