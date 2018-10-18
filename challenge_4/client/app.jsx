@@ -39,11 +39,13 @@ export default class App extends React.Component {
 
   // Upon click, attempt to add a disc to the column and update the React state
   onClick(col) {
-    this.game.addToCol(col);
+    if (!this.game.winner) {
+      this.game.addToCol(col);
     
-    this.setState({
-      game: this.game.board
-    });
+      this.setState({
+        game: this.game.board
+      });
+    }
   }
 
   // Render the game board by emitting divs (Piece objects) with certain properties
