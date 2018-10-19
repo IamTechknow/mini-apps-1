@@ -1,7 +1,7 @@
 // Game constants
 const NONE = 0, RED = 1, BLACK = 2, WIDTH = 8, HEIGHT = 7;
 
-export default class ConnectFour {
+class ConnectFour {
   constructor() {
     this.board = undefined;
     this.isPlayer1 = undefined;
