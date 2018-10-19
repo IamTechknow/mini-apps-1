@@ -64,6 +64,13 @@ export default class App extends React.Component {
       });
     }
   }
+  
+  onReset(event) {
+    this.game.reset();
+    this.setState({
+      start: false
+    });
+  }
 
   onBtnClick(event) {
     this.setState({
@@ -95,6 +102,7 @@ export default class App extends React.Component {
                 <BoardRow row={row} onClick={this.onClick.bind(this)} />
               ))
             }
+            <button className='btn btn-primary' onClick={this.onReset.bind(this)}>Reset</button>
           </div>
         }
       </div>

@@ -130,7 +130,7 @@ export default class ConnectFour {
 
   reset() {
     this.board = [];
-    this.isPlayer1 = true;
+    this.isPlayer1 = this.winner !== BLACK;
     this.piecesLeft = WIDTH * HEIGHT;
     this.winner = NONE;
     this.discs = new Array(WIDTH).fill(HEIGHT - 1);
@@ -142,5 +142,3 @@ export default class ConnectFour {
   }
 
 }
-
-module.exports = ConnectFour;
